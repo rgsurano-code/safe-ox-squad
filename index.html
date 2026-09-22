@@ -1,11 +1,183 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#06100b"><link rel="manifest" href="manifest.webmanifest"><title>Safe - OX Squad v0.3</title><style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;height:100%;overflow:hidden;background:#050907;color:#eafff2;font-family:Arial,sans-serif}button,input{font:inherit}button{cursor:pointer}.screen{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 20%,#173a28,#050907 68%)}.card{width:min(92vw,460px);padding:24px;border:1px solid #54f59b66;border-radius:22px;background:#08120df5}.logo{font-size:30px;font-weight:900}.green{color:#baffd5}.sub,.small{color:#91a99d}.sub{margin:7px 0 18px}.small{font-size:11px}.big,.btn{border:1px solid #69ffb355;border-radius:12px;background:#0d2117;color:#eafff4;font-weight:800}.big{width:100%;padding:15px;margin:6px 0}.field{width:100%;padding:13px;border-radius:11px;border:1px solid #ffffff22;background:#040906;color:white;margin:6px 0 10px}#game{display:none;position:absolute;inset:0}#map{position:absolute;inset:0;overflow:hidden;background:#1a3021;touch-action:none}#world{position:absolute;width:1400px;height:900px;transform-origin:0 0}.top{position:absolute;top:8px;left:8px;right:8px;z-index:20;display:flex;justify-content:space-between;pointer-events:none}.hud{pointer-events:auto;background:#06100ddd;border:1px solid #54f59b66;border-radius:12px;padding:8px 11px}.tools{position:absolute;right:8px;top:70px;z-index:25;display:flex;flex-direction:column;gap:7px}.tool{width:44px;height:44px;border:1px solid #67ffb455;border-radius:12px;background:#06100dea;color:white;font-size:19px}.tool.on{background:#165333}.bottom{position:absolute;left:7px;right:7px;bottom:8px;z-index:25;display:flex;gap:6px;justify-content:center;flex-wrap:wrap}.btn{padding:10px 12px;font-size:12px;background:#07120de8}.primary{background:#17643b}.danger{border-color:#ff665f66}.panel{position:absolute;z-index:40;left:8px;right:8px;bottom:65px;max-height:58vh;overflow:auto;background:#08130eef;border:1px solid #62ffad66;border-radius:17px;padding:14px;display:none;backdrop-filter:blur(14px)}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #ffffff12}.mapChoice{display:grid;grid-template-columns:1fr 1fr;gap:7px}.mapChoice button{padding:10px;text-align:left;border:1px solid #ffffff1a;border-radius:10px;background:#0b1b13;color:#dfffea}.mapChoice .active{border-color:#65ffae;background:#123c27}#toast{position:absolute;z-index:60;top:68px;left:50%;transform:translateX(-50%);background:#07140ef0;border:1px solid #6affb477;border-radius:12px;padding:9px 13px;display:none;white-space:nowrap}.mode{position:absolute;left:50%;top:70px;transform:translateX(-50%);z-index:22;background:#07140edb;border:1px solid #ffffff22;border-radius:20px;padding:6px 10px;font-size:11px;display:none}.marker{position:absolute;transform:translate(-50%,-50%);pointer-events:none;display:flex;align-items:center;justify-content:center;font-weight:900}.enemy{width:28px;height:28px;border-radius:50%;background:#ff4d4538;border:2px solid #ff665f}.squad{width:34px;height:34px;border-radius:50%;background:#4caaff38;border:2px solid #62b9ff}.safe{position:absolute;border:3px solid #e6ff9a;border-radius:50%;box-shadow:0 0 22px #dfff7a55;transform:translate(-50%,-50%);pointer-events:none}.safe.old{opacity:.28;border-width:2px}.heat{position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(circle,#eaff8a72 0,#d8ff5b45 24%,#7dff9b1d 48%,transparent 72%)}.route{position:absolute;height:4px;border-radius:5px;transform-origin:0 50%;z-index:14}.g{background:#58ff9e}.y{background:#ffe45d}.r{background:#ff665f}.hidden{display:none!important}.air{width:16px;height:16px;border-radius:50%;background:white;border:2px solid #80bfff;position:absolute;transform:translate(-50%,-50%)}.bar{height:8px;background:#ffffff0e;border-radius:5px;overflow:hidden;margin:4px 0 8px}.bar i{display:block;height:100%;background:#c9ff77}
-</style></head><body><div id="home" class="screen"><div class="card"><div class="logo">SAFE - <span class="green">OX SQUAD</span></div><div class="sub">v0.3 • versão recheada para testes</div><button class="big" onclick="start('IGL')">👑 SOU IGL</button><button class="big" onclick="guestScreen()">🟢 SOU CONVIDADO</button><div class="small">7 mapas • toque • Safes • avião • inimigos • squad • heatmap • regiões • 3 rotas • histórico local</div></div></div><div id="guest" class="screen" style="display:none"><div class="card"><div class="logo" style="font-size:24px">ENTRAR NA SALA</div><input id="code" class="field" placeholder="Código da sala • OX-7K4P"><input id="nick" class="field" placeholder="Seu nickname"><button class="big" onclick="start('GUEST')">ENTRAR</button><button class="big" onclick="back()">VOLTAR</button></div></div><div id="game"><div id="map"><div id="world"><div id="bg"></div><div id="heat"></div><div id="safes"></div><div id="routes"></div><div id="marks"></div></div></div><div class="top"><div class="hud"><b id="role">👑 IGL</b><div class="small">Sala <span id="room">OX-7K4P</span> • 1/8</div></div><div class="hud"><b id="phase">SAFE 1</b><div class="small"><span id="mapname">Erangel</span> • <span id="clock">00:00</span></div></div></div><div id="mode" class="mode"></div><div class="tools"><button class="tool on" onclick="layer('heat',this)">🌡️</button><button class="tool on" onclick="layer('safe',this)">🎯</button><button class="tool on" onclick="layer('enemy',this)">🔺</button><button class="tool on" onclick="layer('squad',this)">👥</button><button class="tool on" onclick="layer('route',this)">🛣️</button><button class="tool" onclick="panel('maps')">🗺️</button><button class="tool" onclick="panel('analysis')">📊</button><button class="tool" onclick="panel('history')">🕘</button></div><div id="toast"></div><div id="p" class="panel"></div><div class="bottom"><button id="airBtn" class="btn" onclick="mode('air')">✈️ Avião</button><button id="safeBtn" class="btn" onclick="mode('safe')">🎯 Safe</button><button class="btn" onclick="mode('enemy')">🔺 Inimigo</button><button id="squadBtn" class="btn" onclick="mode('squad')">👥 Squad</button><button id="confirmBtn" class="btn primary" onclick="confirmSafe()">✓ Confirmar Safe</button><button class="btn" onclick="panel('prob')">🌡️ Prob.</button><button class="btn" onclick="panel('routes')">🛣️ Rotas</button><button id="finishBtn" class="btn danger" onclick="finish()">FIM</button></div></div><script>
-const maps={Erangel:['#507a8c','#597f4c','#8eae61'],Miramar:['#876f45','#b99a62','#d6bc7e'],Taego:['#607d72','#78986c','#a4b57b'],Rondo:['#557b76','#789c7d','#aac28d'],Vikendi:['#708a90','#8da7a0','#c4d2c1'],Sanhok:['#3e6f67','#5f9b63','#9bcf72'],Deston:['#4f7381','#6c8f73','#9fb483']};let S={role:'IGL',nick:'IGL',room:'OX-7K4P',map:'Erangel',mode:null,scale:1,ox:0,oy:0,down:false,sx:0,sy:0,sox:0,soy:0,temp:null,safes:[],enemies:[],air:[],squad:{x:700,y:450},routes:[],selected:null,layers:{heat:true,safe:true,enemy:true,squad:true,route:true},start:Date.now()};const world=document.getElementById('world'),mapEl=document.getElementById('map');
-function start(r){S.role=r;if(r==='GUEST'){S.nick=document.getElementById('nick').value||'Convidado';S.room=document.getElementById('code').value||'OX-7K4P'}home.style.display='none';guest.style.display='none';game.style.display='block';document.getElementById('role').textContent=(r==='IGL'?'👑 ':'🟢 ')+S.nick;document.getElementById('room').textContent=S.room;['airBtn','safeBtn','squadBtn','confirmBtn','finishBtn'].forEach(x=>document.getElementById(x).classList.toggle('hidden',r==='GUEST'));drawMap();fit();toast('Sala pronta • '+S.map)}function guestScreen(){home.style.display='none';guest.style.display='flex'}function back(){guest.style.display='none';home.style.display='flex'}function fit(){S.scale=Math.max(.58,Math.min(1,Math.min(innerWidth/1400,innerHeight/900)*1.08));S.ox=(innerWidth-1400*S.scale)/2;S.oy=(innerHeight-900*S.scale)/2;render()}function render(){world.style.transform=`translate(${S.ox}px,${S.oy}px) scale(${S.scale})`}
-function drawMap(){let [w,l,a]=maps[S.map],svg=`<svg width="1400" height="900" xmlns="http://www.w3.org/2000/svg"><rect width="1400" height="900" fill="${l}"/><path d="M0 0H270C360 110 210 220 350 330C440 410 370 520 500 590C600 650 550 780 650 900H0Z" fill="${w}"/><path d="M1400 0H1120C1040 130 1200 200 1080 310C980 400 1130 500 1010 590C920 680 1000 790 900 900H1400Z" fill="${w}" opacity=".9"/>`;for(let i=0;i<8;i++){let x=180+(i*173)%1050,y=130+(i*97)%650,r=70+(i%3)*35;svg+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${a}" opacity=".18"/><circle cx="${x+35}" cy="${y-15}" r="${r*.45}" fill="#31543b" opacity=".22"/>`}let roads=[[80,720,1320,180],[120,160,1150,610],[420,60,900,820]];for(let q of roads)svg+=`<line x1="${q[0]}" y1="${q[1]}" x2="${q[2]}" y2="${q[3]}" stroke="#ded49b" stroke-width="15" opacity=".32"/><line x1="${q[0]}" y1="${q[1]}" x2="${q[2]}" y2="${q[3]}" stroke="#56634e" stroke-width="5"/>`;for(let x=100;x<1400;x+=100)svg+=`<line x1="${x}" y1="0" x2="${x}" y2="900" stroke="white" stroke-opacity=".045"/>`;for(let y=100;y<900;y+=100)svg+=`<line x1="0" y1="${y}" x2="1400" y2="${y}" stroke="white" stroke-opacity=".045"/>`;svg+=`<text x="35" y="45" fill="white" fill-opacity=".65" font-size="22" font-weight="bold">${S.map.toUpperCase()} • TACTICAL TEST MAP</text></svg>`;document.getElementById('bg').innerHTML=svg;renderState()}
-function point(e){let r=mapEl.getBoundingClientRect();return{x:(e.clientX-r.left-S.ox)/S.scale,y:(e.clientY-r.top-S.oy)/S.scale}}function mode(m){if(S.role==='GUEST'&&['air','safe','squad'].includes(m))return toast('Função exclusiva do IGL');S.mode=S.mode===m?null:m;document.getElementById('mode').textContent={air:'✈️ Arraste a rota do avião',safe:'🎯 Arraste para desenhar a Safe',enemy:'🔺 Toque para marcar inimigo',squad:'👥 Arraste para mover o squad'}[m]||'';document.getElementById('mode').style.display=S.mode?'block':'none';toast(S.mode?'Modo ativo':'Modo encerrado')}
-mapEl.addEventListener('pointerdown',e=>{S.down=true;S.sx=e.clientX;S.sy=e.clientY;S.sox=S.ox;S.soy=S.oy;mapEl.setPointerCapture(e.pointerId);S.temp=point(e);if(S.mode==='enemy'){S.enemies.push({...S.temp,who:S.nick});S.down=false;renderState();toast('Inimigo marcado')}});mapEl.addEventListener('pointermove',e=>{if(!S.down)return;if(!S.mode){S.ox=S.sox+e.clientX-S.sx;S.oy=S.soy+e.clientY-S.sy;render()}else{S.temp2=point(e);if(S.mode==='squad'&&S.role==='IGL'){S.squad=S.temp2;renderState()}}});mapEl.addEventListener('pointerup',e=>{if(!S.down)return;S.down=false;let p=point(e);if(S.mode==='safe'){let r=Math.max(55,Math.hypot(p.x-S.temp.x,p.y-S.temp.y));S.safes.push({x:S.temp.x,y:S.temp.y,r:r});S.mode=null;toast('Safe criada')}else if(S.mode==='air'){S.air.push({a:S.temp,b:p});S.mode=null;toast('Rota do avião registrada')}document.getElementById('mode').style.display=S.mode?'block':'none';renderState()});mapEl.addEventListener('wheel',e=>{e.preventDefault();S.scale=Math.max(.5,Math.min(2.2,S.scale*(e.deltaY<0?1.12:.89)));render()},{passive:false});
-function renderState(){document.getElementById('heat').innerHTML=S.layers.heat?'<div class="heat" style="left:470px;top:170px;width:680px;height:560px"></div><div class="heat" style="left:800px;top:420px;width:380px;height:300px;opacity:.6"></div>':'';document.getElementById('safes').innerHTML=S.layers.safe?S.safes.map((q,i)=>`<div class="safe ${i<S.safes.length-1?'old':''}" style="left:${q.x}px;top:${q.y}px;width:${q.r*2}px;height:${q.r*1.65}px"></div>`).join(''):'';let m='';if(S.layers.enemy)S.enemies.forEach(q=>m+=`<div class="marker enemy" style="left:${q.x}px;top:${q.y}px">!</div>`);if(S.layers.squad)m+=`<div class="marker squad" style="left:${S.squad.x}px;top:${S.squad.y}px">👥</div>`;if(S.air.length)S.air.forEach(q=>m+=`<div class="air" style="left:${q.a.x}px;top:${q.a.y}px"></div><div class="air" style="left:${q.b.x}px;top:${q.b.y}px"></div>`);document.getElementById('marks').innerHTML=m;document.getElementById('routes').innerHTML=S.layers.route?S.routes.map((q,i)=>`<div class="route ${q.c} ${S.selected!==null&&S.selected!==i?'hidden':''}" style="left:${q.a.x}px;top:${q.a.y}px;width:${Math.hypot(q.b.x-q.a.x,q.b.y-q.a.y)}px;transform:rotate(${Math.atan2(q.b.y-q.a.y,q.b.x-q.a.x)}rad)"></div>`).join(''):'';document.getElementById('phase').textContent='SAFE '+Math.max(1,S.safes.length);render();localStorage.setItem('ox_state',JSON.stringify(S))}function layer(k,b){S.layers[k]=!S.layers[k];b.classList.toggle('on',S.layers[k]);renderState()}
-function panel(t){let p=document.getElementById('p');p.style.display='block';if(t==='maps')p.innerHTML='<h3>🗺️ Mapas</h3><div class="mapChoice">'+Object.keys(maps).map(x=>`<button class="${x===S.map?'active':''}" onclick="pickMap('${x}')">${x}</button>`).join('')+'</div><br><button class="btn" onclick="closeP()">FECHAR</button>';if(t==='prob')p.innerHTML='<h3>🌡️ Próxima Safe</h3>'+[['Centro/Leste',28],['Oeste',18],['Norte',15],['Sudoeste',14],['Outras',25]].map(x=>`<div class="row"><span>${x[0]}</span><b>${x[1]}%</b></div><div class="bar"><i style="width:${x[1]*3.2}%"></i></div>`).join('')+'<p class="small">Valores demonstrativos nesta versão. Depois serão calculados pelo modelo real.</p><button class="btn" onclick="closeP()">FECHAR</button>';if(t==='analysis')p.innerHTML='<h3>📊 Análise tática</h3><div class="row"><span>Elevação favorável</span><b>72%</b></div><div class="row"><span>Cobertura</span><b>68%</b></div><div class="row"><span>Estradas</span><b>61%</b></div><div class="row"><span>Exposição</span><b>29%</b></div><div class="row"><span>Pressão provável</span><b>34%</b></div><p class="small">Interface demonstrativa; o cálculo real virá dos dados de terreno e histórico.</p><button class="btn" onclick="closeP()">FECHAR</button>';if(t==='routes'){makeRoutes();p.innerHTML='<h3>🛣️ 3 rotas</h3><p class="small">Toque numa opção para manter somente aquela rota.</p><div class="row"><button class="btn" onclick="pickRoute(0)">🟢 Mais segura</button><button class="btn" onclick="pickRoute(1)">🟡 Alternativa</button><button class="btn" onclick="pickRoute(2)">🔴 Alto risco</button></div><div class="row"><span>Cobertura</span><b>68%</b></div><div class="row"><span>Elevação</span><b>72%</b></div><div class="row"><span>Estradas</span><b>61%</b></div><button class="btn" onclick="closeP()">FECHAR</button>'};if(t==='history'){let h=JSON.parse(localStorage.getItem('ox_hist')||'[]');p.innerHTML='<h3>🕘 Histórico</h3>'+(h.length?h.map((x,i)=>`<div class="row"><span>${i+1}. ${x.map}<br><span class="small">${x.date}</span></span><b>${x.safes} Safes<br>${x.enemies} inimigos</b></div>`).join(''):'<p class="small">Nenhuma partida salva.</p>')+'<button class="btn" onclick="closeP()">FECHAR</button>'}}function closeP(){document.getElementById('p').style.display='none'}function pickMap(x){S.map=x;S.safes=[];S.enemies=[];S.air=[];S.routes=[];S.selected=null;drawMap();closeP();toast('Mapa alterado: '+x)}function makeRoutes(){S.routes=[{a:{...S.squad},b:{x:1040,y:280},c:'g'},{a:{...S.squad},b:{x:1130,y:500},c:'y'},{a:{...S.squad},b:{x:900,y:740},c:'r'}];S.selected=null;renderState()}function pickRoute(i){S.selected=i;renderState();closeP();toast('Rota selecionada')}function confirmSafe(){if(S.role==='GUEST')return;toast('Safe confirmada • probabilidades atualizadas');panel('prob')}function finish(){let h=JSON.parse(localStorage.getItem('ox_hist')||'[]');h.unshift({date:new Date().toLocaleString('pt-BR'),map:S.map,safes:S.safes.length,enemies:S.enemies.length});localStorage.setItem('ox_hist',JSON.stringify(h.slice(0,20)));toast('Partida guardada localmente')}function toast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(window.tt);window.tt=setTimeout(()=>e.style.display='none',1800)}setInterval(()=>{let s=Math.floor((Date.now()-S.start)/1000);document.getElementById('clock').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')},1000);window.onresize=render;
-</script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#06100b">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Safe - OX Squad v0.3.1</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050907;color:#effff5;font-family:Arial,sans-serif}
+button,input{font:inherit}button{touch-action:manipulation}
+.screen{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 15%,#173c29,#050907 68%)}
+.card{width:92%;max-width:440px;padding:24px;border:1px solid #55f5a066;border-radius:20px;background:#08130ef2}
+.logo{font-size:30px;font-weight:900}.sub{color:#91a99d;margin:8px 0 20px}
+.big{width:100%;padding:15px;margin:6px 0;border-radius:13px;border:1px solid #5cffaa55;background:#10251a;color:#effff5;font-weight:800}
+.field{width:100%;padding:13px;margin:5px 0 10px;border-radius:10px;border:1px solid #ffffff22;background:#040806;color:white}
+#game{display:none;position:absolute;inset:0}
+#viewport{position:absolute;inset:0;overflow:hidden;touch-action:none;background:#1b3821}
+#world{position:absolute;width:1400px;height:900px;left:0;top:0;transform-origin:0 0}
+#world svg{position:absolute;inset:0;width:1400px;height:900px}
+.layer{position:absolute;inset:0;pointer-events:none}
+.top{position:absolute;z-index:30;left:8px;right:8px;top:8px;display:flex;justify-content:space-between;pointer-events:none}
+.hud{background:#06100ded;border:1px solid #5cffaa55;border-radius:12px;padding:8px 10px}
+.small{font-size:11px;color:#91a99d;margin-top:3px}
+.tools{position:absolute;z-index:35;right:8px;top:70px;display:flex;flex-direction:column;gap:6px}
+.tool{width:45px;height:45px;border-radius:12px;border:1px solid #66ffb255;background:#07120eea;color:white;font-size:19px}
+.tool.on{background:#15502f;border-color:#69ffad}
+.bottom{position:absolute;z-index:35;left:7px;right:7px;bottom:8px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.btn{padding:10px 12px;border-radius:11px;border:1px solid #67ffad55;background:#07120eea;color:white;font-weight:800;font-size:12px}
+.btn.primary{background:#17633a}.btn.danger{border-color:#ff696255}
+.panel{position:absolute;z-index:50;left:8px;right:8px;bottom:70px;max-height:60vh;overflow:auto;padding:14px;border-radius:17px;border:1px solid #63ffae66;background:#07120ef5;display:none}
+.panel h3{margin:0 0 10px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #ffffff12}
+.mapgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.mapgrid button{padding:11px;border-radius:10px;border:1px solid #ffffff20;background:#0b1b13;color:white}.mapgrid button.active{border-color:#65ffad;background:#15452b}
+.toast{position:absolute;z-index:70;top:68px;left:50%;transform:translateX(-50%);padding:9px 13px;border-radius:12px;border:1px solid #68ffad66;background:#06120ded;display:none;white-space:nowrap}
+.mode{position:absolute;z-index:32;left:50%;top:70px;transform:translateX(-50%);padding:6px 10px;border-radius:18px;border:1px solid #ffffff22;background:#06120ddd;display:none;font-size:11px}
+.safe{position:absolute;transform:translate(-50%,-50%);border:3px solid #e8ff98;box-shadow:0 0 18px #e8ff9850;border-radius:50%;pointer-events:none}
+.safe.old{opacity:.25;border-width:2px}
+.heat{position:absolute;border-radius:50%;background:radial-gradient(circle,#efff8a70,#a5ff6d30 40%,transparent 72%);pointer-events:none}
+.marker{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;pointer-events:none}
+.enemy{width:28px;height:28px;border-radius:50%;border:2px solid #ff625c;background:#ff625c35;color:white;font-weight:900}
+.squad{width:34px;height:34px;border-radius:50%;border:2px solid #62b9ff;background:#62b9ff35}
+.airline{height:4px;background:#ffe45d;border-radius:4px;position:absolute;transform-origin:0 50%;pointer-events:none}
+.dot{width:16px;height:16px;border-radius:50%;border:2px solid white;background:#62b9ff;position:absolute;transform:translate(-50%,-50%)}
+.route{height:4px;border-radius:4px;position:absolute;transform-origin:0 50%;pointer-events:auto}
+.rg{background:#58ff9e}.ry{background:#ffe45d}.rr{background:#ff625c}.hide{display:none!important}
+.prob{height:8px;background:#ffffff12;border-radius:5px;margin:5px 0 10px;overflow:hidden}.prob i{display:block;height:100%;background:#caff78}
+</style>
+</head>
+<body>
+<section id="home" class="screen"><div class="card">
+<div class="logo">SAFE - OX SQUAD</div><div class="sub">v0.3.1 • versão de teste mobile</div>
+<button class="big" id="iglBtn">👑 SOU IGL</button>
+<button class="big" id="guestBtn">🟢 SOU CONVIDADO</button>
+</div></section>
+
+<section id="guestScreen" class="screen" style="display:none"><div class="card">
+<div class="logo" style="font-size:24px">ENTRAR NA SALA</div>
+<div class="sub">Entre na sala do IGL.</div>
+<input id="roomInput" class="field" placeholder="Código da sala">
+<input id="nickInput" class="field" placeholder="Nickname">
+<button class="big" id="enterGuest">ENTRAR</button>
+<button class="big" id="backHome">VOLTAR</button>
+</div></section>
+
+<section id="game">
+<div id="viewport"><div id="world">
+<div id="mapSvg"></div><div id="heatLayer" class="layer"></div><div id="safeLayer" class="layer"></div><div id="routeLayer" class="layer"></div><div id="markerLayer" class="layer"></div>
+</div></div>
+
+<div class="top"><div class="hud"><b id="roleText">👑 IGL</b><div class="small">Sala <span id="roomText">OX-7K4P</span> • 1/8</div></div>
+<div class="hud"><b id="phaseText">SAFE 1</b><div class="small"><span id="mapText">Erangel</span> • <span id="clock">00:00</span></div></div></div>
+<div id="modeText" class="mode"></div><div id="toast" class="toast"></div>
+
+<div class="tools">
+<button class="tool on" data-l="heat">🌡️</button>
+<button class="tool on" data-l="safe">🎯</button>
+<button class="tool on" data-l="enemy">🔺</button>
+<button class="tool on" data-l="squad">👥</button>
+<button class="tool on" data-l="route">🛣️</button>
+<button class="tool" id="mapsTool">🗺️</button>
+<button class="tool" id="analysisTool">📊</button>
+<button class="tool" id="historyTool">🕘</button>
+</div>
+
+<div id="panel" class="panel"></div>
+<div class="bottom">
+<button class="btn" id="airBtn">✈️ Avião</button>
+<button class="btn" id="safeBtn">🎯 Desenhar Safe</button>
+<button class="btn" id="enemyBtn">🔺 Inimigo</button>
+<button class="btn" id="squadBtn">👥 Squad</button>
+<button class="btn primary" id="confirmBtn">✓ Confirmar Safe</button>
+<button class="btn" id="probBtn">🌡️ Prob.</button>
+<button class="btn" id="routesBtn">🛣️ Rotas</button>
+<button class="btn danger" id="finishBtn">FIM</button>
+</div>
+</section>
+
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const maps={
+Erangel:{land:"#4f7b45",water:"#6d9aaa",a:"#a5c277"},
+Miramar:{land:"#b99b64",water:"#89724c",a:"#d8c486"},
+Taego:{land:"#76966c",water:"#5d7d73",a:"#a8bd82"},
+Rondo:{land:"#789b7c",water:"#557a75",a:"#adc48e"},
+Vikendi:{land:"#8ca5a0",water:"#6c878f",a:"#c9d5c7"},
+Sanhok:{land:"#609860",water:"#3f7067",a:"#a2d176"},
+Deston:{land:"#6d9075",water:"#4f7381",a:"#a5ba89"}
+};
+let S={role:"IGL",nick:"IGL",room:"OX-7K4P",map:"Erangel",mode:null,scale:.7,ox:0,oy:0,drag:false,safes:[],enemies:[],air:[],squad:{x:700,y:450},routes:[],chosen:null,layers:{heat:true,safe:true,enemy:true,squad:true,route:true},start:Date.now()};
+
+function toast(t){$("toast").textContent=t;$("toast").style.display="block";clearTimeout(window.__t);window.__t=setTimeout(()=>$("toast").style.display="none",1800)}
+function showGame(){ $("home").style.display="none";$("guestScreen").style.display="none";$("game").style.display="block"; $("roleText").textContent=(S.role==="IGL"?"👑 ":"🟢 ")+S.nick;$("roomText").textContent=S.room; $("airBtn").classList.toggle("hide",S.role!=="IGL");$("safeBtn").classList.toggle("hide",S.role!=="IGL");$("squadBtn").classList.toggle("hide",S.role!=="IGL");$("confirmBtn").classList.toggle("hide",S.role!=="IGL");$("finishBtn").classList.toggle("hide",S.role!=="IGL");buildMap();fit();toast("Sala pronta")}
+$("iglBtn").onclick=()=>{S.role="IGL";S.nick="IGL";showGame()};
+$("guestBtn").onclick=()=>{$("home").style.display="none";$("guestScreen").style.display="flex"};
+$("backHome").onclick=()=>{$("guestScreen").style.display="none";$("home").style.display="flex"};
+$("enterGuest").onclick=()=>{S.role="GUEST";S.nick=$("nickInput").value.trim()||"Convidado";S.room=$("roomInput").value.trim()||"OX-7K4P";showGame()};
+
+function buildMap(){
+let m=maps[S.map];
+$("mapText").textContent=S.map;
+$("mapSvg").innerHTML='<svg viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg"><rect width="1400" height="900" fill="'+m.land+'"/><path d="M0 0H260C350 120 210 240 350 350C450 430 350 580 500 680C590 750 560 820 650 900H0Z" fill="'+m.water+'"/><path d="M1400 0H1120C1030 150 1200 210 1080 320C990 400 1110 500 1010 610C900 710 990 810 900 900H1400Z" fill="'+m.water+'"/><g fill="'+m.a+'" opacity=".22"><circle cx="300" cy="250" r="150"/><circle cx="1050" cy="300" r="180"/><circle cx="760" cy="670" r="170"/></g><g stroke="#e7d99d" stroke-width="13" opacity=".35"><path d="M70 720L1310 160"/><path d="M100 180L1210 650"/><path d="M430 40L980 820"/></g><g stroke="#ffffff" stroke-opacity=".05">'+gridLines()+'</g><text x="30" y="45" fill="white" fill-opacity=".65" font-size="22" font-weight="800">'+S.map.toUpperCase()+' • MAPA TÁTICO</text></svg>';
+render();
+}
+function gridLines(){let s="";for(let x=100;x<1400;x+=100)s+='<line x1="'+x+'" y1="0" x2="'+x+'" y2="900"/>';for(let y=100;y<900;y+=100)s+='<line x1="0" y1="'+y+'" x2="1400" y2="'+y+'"/>';return s}
+function fit(){S.scale=Math.max(.55,Math.min(1,Math.min(innerWidth/1400,innerHeight/900)*1.08));S.ox=(innerWidth-1400*S.scale)/2;S.oy=(innerHeight-900*S.scale)/2;render()}
+function render(){ $("world").style.transform="translate("+S.ox+"px,"+S.oy+"px) scale("+S.scale+")"; renderLayers() }
+function point(e){const r=$("viewport").getBoundingClientRect();return{x:(e.clientX-r.left-S.ox)/S.scale,y:(e.clientY-r.top-S.oy)/S.scale}}
+function renderLayers(){
+$("heatLayer").innerHTML=S.layers.heat?'<div class="heat" style="left:450px;top:150px;width:700px;height:560px"></div><div class="heat" style="left:820px;top:420px;width:350px;height:300px;opacity:.65"></div>':"";
+$("safeLayer").innerHTML=S.layers.safe?S.safes.map((s,i)=>'<div class="safe '+(i<S.safes.length-1?'old':'')+'" style="left:'+s.x+'px;top:'+s.y+'px;width:'+(s.r*2)+'px;height:'+(s.r*1.65)+'px"></div>').join(""):"";
+let m="";
+if(S.layers.enemy)S.enemies.forEach(e=>m+='<div class="marker enemy" style="left:'+e.x+'px;top:'+e.y+'px">!</div>');
+if(S.layers.squad)m+='<div class="marker squad" style="left:'+S.squad.x+'px;top:'+S.squad.y+'px">👥</div>';
+S.air.forEach(a=>{let dx=a.b.x-a.a.x,dy=a.b.y-a.a.y;m+='<div class="airline" style="left:'+a.a.x+'px;top:'+a.a.y+'px;width:'+Math.hypot(dx,dy)+'px;transform:rotate('+Math.atan2(dy,dx)+'rad)"></div>'});
+$("markerLayer").innerHTML=m;
+if(S.layers.route)$("routeLayer").innerHTML=S.routes.map((r,i)=>'<div class="route '+r.c+' '+(S.chosen!==null&&S.chosen!==i?'hide':'')+'" data-i="'+i+'" style="left:'+r.a.x+'px;top:'+r.a.y+'px;width:'+Math.hypot(r.b.x-r.a.x,r.b.y-r.a.y)+'px;transform:rotate('+Math.atan2(r.b.y-r.a.y,r.b.x-r.a.x)+'rad)"></div>').join("");else $("routeLayer").innerHTML="";
+}
+function mode(m){
+if(S.role==="GUEST"&&["air","safe","squad"].includes(m)){toast("Essa função é exclusiva do IGL");return}
+S.mode=S.mode===m?null:m;
+const t={air:"✈️ Arraste para marcar o avião",safe:"🎯 Arraste para desenhar a Safe",enemy:"🔺 Toque no mapa para marcar inimigo",squad:"👥 Arraste para posicionar o squad"};
+$("modeText").textContent=t[m]||"";$("modeText").style.display=S.mode?"block":"none";toast(S.mode?t[m]:"Modo encerrado");
+}
+$("airBtn").onclick=()=>mode("air");$("safeBtn").onclick=()=>mode("safe");$("enemyBtn").onclick=()=>mode("enemy");$("squadBtn").onclick=()=>mode("squad");
+
+$("viewport").addEventListener("pointerdown",e=>{
+S.drag=true;S.sx=e.clientX;S.sy=e.clientY;S.startOx=S.ox;S.startOy=S.oy;S.p0=point(e);$("viewport").setPointerCapture(e.pointerId);
+if(S.mode==="enemy"){S.enemies.push({x:S.p0.x,y:S.p0.y});S.drag=false;S.mode=null;$("modeText").style.display="none";render();toast("Inimigo marcado")}
+});
+$("viewport").addEventListener("pointermove",e=>{
+if(!S.drag)return;let p=point(e);
+if(S.mode===null){S.ox=S.startOx+e.clientX-S.sx;S.oy=S.startOy+e.clientY-S.sy;render()}
+else if(S.mode==="squad"){S.squad=p;render()}
+});
+$("viewport").addEventListener("pointerup",e=>{
+if(!S.drag)return;S.drag=false;let p=point(e);
+if(S.mode==="air"){S.air.push({a:S.p0,b:p});S.mode=null;toast("Rota do avião registrada")}
+else if(S.mode==="safe"){let r=Math.max(55,Math.hypot(p.x-S.p0.x,p.y-S.p0.y));S.safes.push({x:S.p0.x,y:S.p0.y,r:r});$("phaseText").textContent="SAFE "+S.safes.length;S.mode=null;toast("Safe desenhada")}
+$("modeText").style.display=S.mode?"block":"none";render()
+});
+$("viewport").addEventListener("wheel",e=>{e.preventDefault();let p=point(e),old=S.scale;S.scale=Math.max(.5,Math.min(2,old*(e.deltaY<0?1.12:.89)));S.ox=e.clientX-p.x*S.scale;S.oy=e.clientY-p.y*S.scale;render()},{passive:false});
+
+function panel(html){$("panel").innerHTML=html;$("panel").style.display="block"}
+function closePanel(){ $("panel").style.display="none" }
+function mapPanel(){panel('<h3>🗺️ Escolher mapa</h3><div class="mapgrid">'+Object.keys(maps).map(m=>'<button class="'+(m===S.map?'active':'')+'" data-map="'+m+'">'+m+'</button>').join("")+'</div><br><button class="btn" id="closePanel">FECHAR</button>');document.querySelectorAll("[data-map]").forEach(b=>b.onclick=()=>{S.map=b.dataset.map;S.safes=[];S.enemies=[];S.air=[];S.routes=[];S.chosen=null;buildMap();closePanel();toast("Mapa: "+S.map)});$("closePanel").onclick=closePanel}
+function probPanel(){panel('<h3>🌡️ Probabilidades</h3>'+[['Centro/Leste',28],['Oeste',18],['Norte',15],['Sudoeste',14],['Outras',25]].map(x=>'<div class="row"><span>'+x[0]+'</span><b>'+x[1]+'%</b></div><div class="prob"><i style="width:'+x[1]*3.2+'%"></i></div>').join("")+'<p class="small">Valores demonstrativos nesta versão. O modelo real virá com histórico/backend.</p><button class="btn" id="closePanel">FECHAR</button>');$("closePanel").onclick=closePanel}
+function analysisPanel(){panel('<h3>📊 Análise</h3><div class="row"><span>Elevação favorável</span><b>72%</b></div><div class="row"><span>Cobertura</span><b>68%</b></div><div class="row"><span>Acesso por estrada</span><b>61%</b></div><div class="row"><span>Exposição</span><b>29%</b></div><p class="small">Dados demonstrativos para testar a interface.</p><button class="btn" id="closePanel">FECHAR</button>');$("closePanel").onclick=closePanel}
+function routePanel(){if(!S.routes.length){let a=S.squad;S.routes=[{a,b:{x:1040,y:280},c:"rg"},{a,b:{x:1120,y:510},c:"ry"},{a,b:{x:900,y:740},c:"rr"}];S.chosen=null;render()}panel('<h3>🛣️ 3 rotas</h3><p class="small">Toque em uma cor para manter somente aquela rota.</p><button class="btn" id="r0">🟢 Mais segura</button> <button class="btn" id="r1">🟡 Alternativa</button> <button class="btn" id="r2">🔴 Alto risco</button><hr><div class="row"><span>Distância</span><b>3,8 km</b></div><div class="row"><span>Cobertura</span><b>68%</b></div><div class="row"><span>Elevação</span><b>72%</b></div><button class="btn" id="closePanel">FECHAR</button>');$("r0").onclick=()=>pick(0);$("r1").onclick=()=>pick(1);$("r2").onclick=()=>pick(2);$("closePanel").onclick=closePanel}
+function pick(i){S.chosen=i;render();closePanel();toast("Rota "+(i===0?"verde":i===1?"amarela":"vermelha")+" selecionada")}
+function historyPanel(){let h=JSON.parse(localStorage.getItem("oxhist")||"[]");panel('<h3>🕘 Histórico</h3>'+(h.length?h.map(x=>'<div class="row"><span>'+x.map+'<br><span class="small">'+x.date+'</span></span><b>'+x.safes+' Safes<br>'+x.enemies+' inimigos</b></div>').join(""):"<p class=small>Nenhuma partida guardada.</p>")+'<button class="btn" id="closePanel">FECHAR</button>');$("closePanel").onclick=closePanel}
+$("mapsTool").onclick=mapPanel;$("analysisTool").onclick=analysisPanel;$("historyTool").onclick=historyPanel;$("probBtn").onclick=probPanel;$("routesBtn").onclick=routePanel;
+document.querySelectorAll(".tool[data-l]").forEach(b=>b.onclick=()=>{let l=b.dataset.l;S.layers[l]=!S.layers[l];b.classList.toggle("on",S.layers[l]);render()});
+$("confirmBtn").onclick=()=>{if(!S.safes.length){toast("Desenhe uma Safe primeiro");return}probPanel();toast("Safe confirmada • previsão atualizada")};
+$("finishBtn").onclick=()=>{let h=JSON.parse(localStorage.getItem("oxhist")||"[]");h.unshift({map:S.map,safes:S.safes.length,enemies:S.enemies.length,date:new Date().toLocaleString("pt-BR")});localStorage.setItem("oxhist",JSON.stringify(h.slice(0,20)));toast("Partida guardada localmente")};
+setInterval(()=>{let s=Math.floor((Date.now()-S.start)/1000);$("clock").textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")},1000);
+window.addEventListener("resize",render);
+})();
+</script>
+</body>
+</html>

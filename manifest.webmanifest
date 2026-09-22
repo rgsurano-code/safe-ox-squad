@@ -1,1 +1,8 @@
-{"name":"Safe - OX Squad","short_name":"OX Squad","start_url":"./index.html","display":"standalone","background_color":"#050907","theme_color":"#06100b","description":"Assistente tático Safe - OX Squad"}
+{
+  "name":"Safe - OX Squad",
+  "short_name":"OX Squad",
+  "start_url":"./index.html",
+  "display":"standalone",
+  "background_color":"#050907",
+  "theme_color":"#06100b"
+}
