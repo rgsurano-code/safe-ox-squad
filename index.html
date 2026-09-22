@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071114">
+<title>Safe - OX Squad</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#05090b;color:#eef6f5;font-family:Arial,sans-serif;overflow:hidden}
+.app{height:100dvh;background:#071114}.top{height:58px;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#071114ee;border-bottom:1px solid #294044}
+.brand{font-weight:900;color:#f3c51c;letter-spacing:.5px}.sub{font-size:10px;color:#91a7aa}.pill{border:1px solid #385055;border-radius:18px;padding:7px;font-size:11px}
+.content{position:relative;height:calc(100dvh - 58px)}.map{position:absolute;inset:0;overflow:hidden;touch-action:none;background:radial-gradient(circle at 55% 45%,#b5362840 0 8%,#d4a12a28 20%,#4cae5c22 38%,transparent 60%),linear-gradient(145deg,#17363b,#0c252b 55%,#102e2c)}
+.grid{position:absolute;inset:0;background-image:linear-gradient(#ffffff10 1px,transparent 1px),linear-gradient(90deg,#ffffff10 1px,transparent 1px);background-size:38px 38px}
+.land{position:absolute;left:6%;right:6%;top:8%;bottom:8%;border-radius:48% 42% 44% 38%;background:linear-gradient(145deg,#214c45,#16383a 55%,#244d43);border:2px solid #8aa39a55}
+.road{position:absolute;height:3px;background:#cdbf9180;border-radius:5px;transform-origin:left}.r1{width:72%;left:12%;top:52%;transform:rotate(-12deg)}.r2{width:55%;left:29%;top:33%;transform:rotate(30deg)}.r3{width:48%;left:20%;top:68%;transform:rotate(12deg)}
+.lbl{position:absolute;color:#d9e6e0aa;font-size:12px;font-weight:700}.a{left:27%;top:28%}.b{left:57%;top:24%}.c{left:47%;top:53%}.d{left:66%;top:61%}.e{left:22%;top:62%}
+.circle{position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}.safe1{width:68%;aspect-ratio:1;left:52%;top:48%;border:2px solid #eef5f5aa}.safe2{width:34%;aspect-ratio:1;left:57%;top:44%;border:2px dashed #f3c51cbb}.heat{width:50%;aspect-ratio:1;left:55%;top:45%;background:radial-gradient(circle,#ff403088 0 13%,#ffb62d55 28%,#64cc5a30 50%,transparent 72%);filter:blur(2px)}
+.route{position:absolute;height:3px;transform-origin:left;border-radius:5px;box-shadow:0 0 5px currentColor}.green{width:32%;left:31%;top:68%;transform:rotate(-57deg);background:#49df75;color:#49df75}.yellow{width:34%;left:31%;top:68%;transform:rotate(-47deg);background:#f3c51c;color:#f3c51c}.red{width:38%;left:31%;top:68%;transform:rotate(-35deg);background:#ff4545;color:#ff4545}
+.marker{position:absolute;transform:translate(-50%,-50%);font-size:20px;text-shadow:0 2px 6px #000}.squad{left:31%;top:68%}.enemy1{left:69%;top:52%}.enemy2{left:63%;top:63%}
+.float{position:absolute;right:10px;top:12px;display:flex;flex-direction:column;gap:7px;z-index:4}.icon{width:40px;height:40px;border-radius:12px;border:1px solid #385055;background:#071114ee;color:#e7f1ef}.icon.on{border-color:#f3c51c;color:#f3c51c}
+.panel{position:absolute;right:10px;top:12px;width:min(310px,88vw);max-height:calc(100% - 105px);overflow:auto;background:#071114f2;border:1px solid #385055;border-radius:14px;padding:12px;z-index:6;backdrop-filter:blur(10px)}.hidden{display:none}.panel h3{margin:0 0 8px;font-size:14px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #ffffff12;font-size:12px}.pct{font-weight:900}.routepick{display:flex;gap:6px;margin:10px 0}.routepick button{flex:1;padding:10px 4px;border-radius:10px;background:#0c191c;color:#fff;border:1px solid #405356}.bottom{position:absolute;left:9px;right:9px;bottom:9px;display:flex;gap:6px;z-index:5}.bottom button{flex:1;padding:11px 5px;border-radius:11px;background:#071114ee;color:#eef6f5;border:1px solid #385055;font-size:10px}.primary{background:#f3c51c!important;color:#111!important;font-weight:900}
+.modal{position:absolute;inset:0;background:#000b;z-index:20;display:flex;align-items:center;justify-content:center;padding:18px}.card{width:min(410px,94vw);background:#081417;border:1px solid #385055;border-radius:18px;padding:20px;box-shadow:0 20px 60px #000}.card h1{color:#f3c51c;margin:0 0 5px}.card p{color:#9fb2b3;font-size:13px}.choice{width:100%;padding:14px;margin:7px 0;border-radius:12px;background:#0d1a1e;color:#fff;border:1px solid #405356;text-align:left}.igl{border-color:#f3c51c}.guest{border-color:#49df75}.field{width:100%;padding:12px;margin:6px 0 10px;background:#0b171a;color:#fff;border:1px solid #405356;border-radius:10px}.maps{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.mapbtn{padding:11px;background:#0b171a;color:#fff;border:1px solid #405356;border-radius:10px}.mapbtn.active{border-color:#f3c51c;color:#f3c51c}.toast{position:absolute;left:50%;bottom:66px;transform:translateX(-50%);z-index:30;background:#081719;border:1px solid #49df75;border-radius:18px;padding:8px 12px;font-size:11px;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="top"><div><div class="brand">👑 SAFE - OX SQUAD</div><div class="sub">ASSISTENTE TÁTICO • WEB TEST</div></div><div class="pill" id="status">● Teste local</div></div>
+<div class="content">
+<div class="map" id="map">
+<div class="grid"></div><div class="land"></div><div class="road r1"></div><div class="road r2"></div><div class="road r3"></div>
+<div class="lbl a">Rozhok</div><div class="lbl b">Yasnaya</div><div class="lbl c">School</div><div class="lbl d">Mansion</div><div class="lbl e">Pochinki</div>
+<div class="circle safe1"></div><div class="circle safe2"></div><div class="circle heat" id="heat"></div>
+<div class="route green" id="rg"></div><div class="route yellow" id="ry"></div><div class="route red" id="rr"></div>
+<div class="marker squad">🔷</div><div class="marker enemy1">🔺</div><div class="marker enemy2">🔺</div>
+</div>
+<div class="float">
+<button class="icon on" data-l="safe">🎯</button><button class="icon on" data-l="enemy">🔺</button><button class="icon on" data-l="squad">👥</button><button class="icon on" data-l="heat">🌡️</button><button class="icon on" data-l="routes">🛣️</button><button class="icon" data-l="air">✈️</button>
+</div>
+<div class="panel hidden" id="panel"><h3 id="pt"></h3><div id="pb"></div></div>
+<div class="bottom"><button id="air">✈️ Avião</button><button id="safe">🎯 Safe 1</button><button id="prob">🌡️ Probabilidades</button><button id="routes" class="primary">🛣️ Rotas</button></div>
+<div class="modal" id="modal"><div class="card" id="card"><h1>SAFE - OX SQUAD</h1><p>Protótipo Web para testar no PC e no celular.</p><button class="choice igl" onclick="role('igl')">👑 <b>SOU IGL</b><br><small>Criar e comandar partida</small></button><button class="choice guest" onclick="role('guest')">🟢 <b>SOU CONVIDADO</b><br><small>Entrar em uma sala</small></button></div></div>
+</div></div>
+<script>
+const q=s=>document.querySelector(s),qa=s=>document.querySelectorAll(s);
+function role(r){if(r==='igl')q('#card').innerHTML='<h1>👑 MODO IGL</h1><p>Sala automática para até 8 jogadores.</p><input class="field" value="OX João"><div class="pill">Código: <b>OX-7K4P</b></div><button class="choice igl" onclick="maps()">📋 Compartilhar código</button>';else q('#card').innerHTML='<h1>🟢 CONVIDADO</h1><p>Entre com o código enviado pelo IGL.</p><input class="field" value="OX-7K4P"><input class="field" value="OX Kadu"><button class="choice guest" onclick="maps()">ENTRAR NA SALA</button>'}
+function maps(){q('#card').innerHTML='<h1>Nova partida</h1><p>Escolha o mapa.</p><div class="maps">'+['Erangel','Miramar','Taego','Rondo','Vikendi','Sanhok','Deston'].map((m,i)=>'<button class="mapbtn '+(!i?'active':'')+'">'+m+'</button>').join('')+'</div><button class="choice igl" onclick="start()">INICIAR PARTIDA</button>'}
+function start(){q('#modal').style.display='none';toast('Partida iniciada — teste Avião, Safe 1 e Probabilidades')}
+function toast(t){let x=document.createElement('div');x.className='toast';x.textContent=t;document.body.appendChild(x);setTimeout(()=>x.remove(),2200)}
+function panel(t){let title='',body='';if(t==='prob'){title='🌡️ Possibilidades da Safe 2';body='<div class="row"><span>🔴 Centro</span><b>28%</b></div><div class="row"><span>🟠 Oeste</span><b>18%</b></div><div class="row"><span>🟡 Norte</span><b>15%</b></div><div class="row"><span>🟢 Sudoeste</span><b>14%</b></div><div class="row"><span>🔵 Outras</span><b>25%</b></div><p class="sub">Demonstrativo: o motor real usará partidas históricas.</p>'}if(t==='route'){title='🛣️ Escolha a direção e rota';body='<p class="sub">Primeiro escolha a região. Depois o sistema calcula caminhos considerando elevação, morros, ruas, cobertura e inimigos.</p><div class="routepick"><button style="color:#49df75" onclick="pick(1)">🟢 Segura</button><button style="color:#f3c51c" onclick="pick(2)">🟡 Alternativa</button><button style="color:#ff4545" onclick="pick(3)">🔴 Risco</button></div><div class="row"><span>Segura</span><b>2,1 km</b></div><div class="row"><span>Alternativa</span><b>2,8 km</b></div><div class="row"><span>Risco</span><b>3,4 km</b></div>'}if(t==='safe'){title='🎯 Safes';body='<div class="row"><span>Safe 1</span><b>Atual</b></div><div class="row"><span>Safe 2</span><b>Previsão</b></div>'}q('#pt').textContent=title;q('#pb').innerHTML=body;q('#panel').classList.remove('hidden')}
+function pick(n){['rg','ry','rr'].forEach((id,i)=>q('#'+id).style.display=i===n-1?'block':'none');q('#panel').classList.add('hidden');toast('Rota '+(n===1?'🟢 segura':n===2?'🟡 alternativa':'🔴 risco')+' selecionada')}
+q('#prob').onclick=()=>panel('prob');q('#routes').onclick=()=>panel('route');q('#safe').onclick=()=>{toast('Safe 1 confirmada');panel('prob')};q('#air').onclick=()=>toast('Modo avião: marque a trajetória no mapa');
+qa('.icon').forEach(b=>b.onclick=()=>{b.classList.toggle('on');let l=b.dataset.l;if(l==='heat')q('#heat').style.display=b.classList.contains('on')?'block':'none';if(l==='routes')panel('route');if(l==='safe')panel('safe');if(l==='enemy')qa('.marker:not(.squad)').forEach(x=>x.style.display=b.classList.contains('on')?'block':'none')});
+let drag=false,x=0,y=0,px=0,py=0;const m=q('#map');m.onpointerdown=e=>{drag=true;x=e.clientX;y=e.clientY;m.setPointerCapture(e.pointerId)};m.onpointermove=e=>{if(!drag)return;px+=e.clientX-x;py+=e.clientY-y;x=e.clientX;y=e.clientY;q('.land').style.transform=`translate(${px}px,${py}px)`};m.onpointerup=()=>drag=false;
+</script>
+</body></html>
